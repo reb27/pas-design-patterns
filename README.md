@@ -11,3 +11,9 @@ This repository was created to store code examples for the **"Projeto e Arquitet
 ![Gopher](https://media.tenor.com/TCMWkxIkF9IAAAAj/dancing-gopher.gif)
 
 
+## 💡 How to test?
+
+1. Clone the repo 🧑‍💻
+2. Ensure Go is installed by running `go version` 📜
+3. Run `go mod tidy` to tidy up the dependencies 📦
+5. Inside the project, run `go run main.go` to see the results 🚀
