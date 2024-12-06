@@ -1,4 +1,4 @@
-package main
+package pattern
 
 import (
 	"fmt"
@@ -32,7 +32,6 @@ func (r *ROICalculator) CalculateROI(client Client) float64 {
 
 func (p *ROICalculatorCacheProxy) CalculateROI(client Client) float64 {
 	if result, exists := p.cache[client.ID]; exists {
-		fmt.Println("Resultado cacheado encontrado")
 		return result
 	}
 
@@ -42,12 +41,13 @@ func (p *ROICalculatorCacheProxy) CalculateROI(client Client) float64 {
 		p.cache = make(map[uuid.UUID]float64)
 	}
 	p.cache[client.ID] = result
-	fmt.Println("Resultado calculado e armazenado no cache")
 
 	return result
 }
 
-func main() {
+func Run() {
+	var totalTime time.Duration
+
 	client := Client{
 		ID:         uuid.New(),
 		Revenue:    5000,
@@ -60,10 +60,13 @@ func main() {
 	for i := 1; i <= 2; i++ {
 		// a segunda vez é o retorno do resultado cacheado
 		start := time.Now()
-
-		roi1 := proxy.CalculateROI(client)
+		roi := proxy.CalculateROI(client)
 		duration := time.Since(start)
-		fmt.Printf("ROI calculado: %.2f%%\n", roi1)
-		fmt.Printf("Tempo para calcular o ROI vez %d: %v\n", i, duration)
+		fmt.Printf("ROI calculado: %.2f%%\n", roi)
+		fmt.Printf("Tempo para calcular o ROI pela %d vez: %v\n", i, duration)
+		totalTime += duration
 	}
+
+	fmt.Printf("[COM CACHE PROXY] O tempo total para executar duas requests para um client foi de : %d\n", totalTime)
+	fmt.Printf("_____________________________________________________________________________________________\n")
 }
